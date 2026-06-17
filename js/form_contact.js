@@ -1,52 +1,97 @@
 
-// Manejo del Formulario de Contacto
+// Manejo del Formulario de Contacto - Versión Profesional
 
 document.addEventListener('DOMContentLoaded', function() {
     const contactForm = document.getElementById('contactForm');
     const formMessage = document.getElementById('formMessage');
+    const mensajeField = document.getElementById('mensaje');
+    const charCount = document.getElementById('charCount');
 
     if (contactForm) {
         contactForm.addEventListener('submit', handleFormSubmit);
+        contactForm.addEventListener('input', handleFormInput);
+    }
+
+    // Contador de caracteres
+    if (mensajeField) {
+        mensajeField.addEventListener('input', function() {
+            const count = this.value.length;
+            charCount.textContent = Math.min(count, 500);
+            if (count > 500) {
+                this.value = this.value.substring(0, 500);
+            }
+        });
+    }
+
+    function handleFormInput(e) {
+        const field = e.target;
+        if (field.tagName === 'INPUT' || field.tagName === 'TEXTAREA' || field.tagName === 'SELECT') {
+            // Limpiar error cuando el usuario comienza a escribir
+            if (field.parentElement.classList.contains('error')) {
+                field.parentElement.classList.remove('error');
+            }
+        }
     }
 
     async function handleFormSubmit(e) {
         e.preventDefault();
 
+        // Validar formulario
+        if (!validateForm()) {
+            showMessage('Por favor completa todos los campos requeridos', 'error');
+            return;
+        }
+
         // Obtener datos del formulario
         const formData = {
-            nombre: document.getElementById('nombre').value,
-            email: document.getElementById('email').value,
-            telefono: document.getElementById('telefono').value,
-            empresa: document.getElementById('empresa').value,
+            nombre: document.getElementById('nombre').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            telefono: document.getElementById('telefono').value.trim(),
+            empresa: document.getElementById('empresa').value.trim(),
             asunto: document.getElementById('asunto').value,
-            mensaje: document.getElementById('mensaje').value,
-            fecha: new Date().toLocaleString('es-ES')
+            mensaje: document.getElementById('mensaje').value.trim(),
+            fecha: new Date().toLocaleString('es-ES'),
+            privacidad: document.getElementById('privacidad').checked
         };
 
         try {
-            // Validar datos
-            if (!formData.nombre || !formData.email || !formData.mensaje) {
-                showMessage('Por favor completa todos los campos requeridos', 'error');
+            // Validaciones adicionales
+            if (!isValidEmail(formData.email)) {
+                showMessage('Por favor ingresa un email válido', 'error');
                 return;
             }
 
-            // En producción, aquí irías a un backend
-            // Por ahora simularemos el envío
+            if (formData.mensaje.length < 10) {
+                showMessage('El mensaje debe tener al menos 10 caracteres', 'error');
+                return;
+            }
+
+            if (!formData.privacidad) {
+                showMessage('Debes aceptar la política de privacidad', 'error');
+                return;
+            }
+
             console.log('Datos del formulario:', formData);
 
-            // Simular envío exitoso
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            // Deshabilitar botón mientras se envía
+            const submitBtn = contactForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Enviando...';
+
+            // Simular envío
+            await new Promise(resolve => setTimeout(resolve, 1500));
 
             // Mostrar mensaje de éxito
-            showMessage('¡Mensaje enviado correctamente! Nos pondremos en contacto pronto.', 'success');
+            showMessage('¡Mensaje enviado correctamente! Nos pondremos en contacto dentro de 24 horas.', 'success');
 
             // Limpiar formulario
             contactForm.reset();
+            charCount.textContent = '0';
 
-            // Opcionalmente, redirigir después de 2 segundos
-            setTimeout(() => {
-                // window.location.href = 'index.html';
-            }, 2000);
+            // Restaurar botón
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
 
         } catch (error) {
             console.error('Error al enviar formulario:', error);
@@ -54,15 +99,83 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    function validateForm() {
+        const nombre = document.getElementById('nombre').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const asunto = document.getElementById('asunto').value;
+        const mensaje = document.getElementById('mensaje').value.trim();
+        const privacidad = document.getElementById('privacidad').checked;
+
+        let isValid = true;
+
+        // Validar nombre
+        if (!nombre) {
+            markFieldError(document.getElementById('nombre'));
+            isValid = false;
+        }
+
+        // Validar email
+        if (!email) {
+            markFieldError(document.getElementById('email'));
+            isValid = false;
+        }
+
+        // Validar asunto
+        if (!asunto) {
+            markFieldError(document.getElementById('asunto'));
+            isValid = false;
+        }
+
+        // Validar mensaje
+        if (!mensaje) {
+            markFieldError(document.getElementById('mensaje'));
+            isValid = false;
+        }
+
+        // Validar privacidad
+        if (!privacidad) {
+            markFieldError(document.getElementById('privacidad'));
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    function markFieldError(field) {
+        const formGroup = field.parentElement;
+        formGroup.classList.add('error');
+        
+        const errorMsg = formGroup.querySelector('.error-message');
+        if (errorMsg) {
+            if (field.type === 'checkbox') {
+                errorMsg.textContent = 'Debes aceptar la política de privacidad';
+            } else if (field.id === 'email') {
+                errorMsg.textContent = 'Email es requerido';
+            } else if (field.id === 'mensaje') {
+                errorMsg.textContent = 'El mensaje es requerido';
+            } else {
+                errorMsg.textContent = `${field.previousElementSibling?.textContent || 'Este campo'} es requerido`;
+            }
+        }
+    }
+
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
     function showMessage(text, type) {
         formMessage.textContent = text;
         formMessage.className = `form-message ${type}`;
         formMessage.style.display = 'block';
 
-        // Auto-ocultar después de 5 segundos
+        // Scroll al mensaje
+        formMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+        // Auto-ocultar después de 6 segundos
         setTimeout(() => {
             formMessage.style.display = 'none';
-        }, 5000);
+        }, 6000);
     }
 });
 
