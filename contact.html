@@ -1,40 +1,174 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
-    <title>ROBIOTEC - Contact</title>
+    <title>ROBIOTEC - Contacto</title>
 </head>
 <body>
+    <canvas id="canvas"></canvas>
+    
     <header>
         <nav class="navbar">
             <div class="logo">ROBIOTEC</div>
             <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">About Us</a></li>
-                <li><a href="services.html">Services</a></li>
-                <li><a href="project.html">Projects</a></li>
-                <li><a href="contact.html" class="active">Contact</a></li>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="about.html">Nosotros</a></li>
+                <li><a href="services.html">Servicios</a></li>
+                <li><a href="project.html">Proyectos</a></li>
+                <li><a href="contact.html" class="active">Contacto</a></li>
             </ul>
-            <!-- #region -->
-            <a href="contact.html" class="btn">Get in Touch</a>
-            <!-- #endregion -->
+            <a href="contact.html" class="btn">Ponte en Contacto</a>
         </nav>
-        
     </header>
-    <main>
-        <div id = 'app'>
-            <h1>Presupuesto</h1>
-            <input type="text" id="name" placeholder="concepto">
-            <input type="number" id="amount" placeholder="monto">
-            <button id="addExpense">Agregar Gastos</button>
 
-            <ul id="expenseList"></ul>
-            <h2>Total: <span id="totalAmount">TOTAL: $0</span></h2>
-        </div>
+    <main>
+        <!-- Hero Section -->
+        <section class="contact-hero">
+            <div class="hero-content">
+                <h1>¿Hablemos?</h1>
+                <p>Estamos aquí para ayudarte a llevar tu proyecto al siguiente nivel</p>
+            </div>
+        </section>
+
+        <!-- Contact Information Cards -->
+        <section class="contact-info-section">
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-icon">📧</div>
+                    <h3>Email</h3>
+                    <p><a href="mailto:contacto@robiotec.com">contacto@robiotec.com</a></p>
+                    <small>Respuesta en 24 horas</small>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">📞</div>
+                    <h3>Teléfono</h3>
+                    <p><a href="tel:+34900123456">+34 900 123 456</a></p>
+                    <small>Lunes a Viernes, 9-18h</small>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">📍</div>
+                    <h3>Ubicación</h3>
+                    <p>Madrid, España</p>
+                    <small>Visítanos en nuestras oficinas</small>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">🕐</div>
+                    <h3>Horario</h3>
+                    <p>Lunes - Viernes</p>
+                    <small>09:00 - 18:00 CET</small>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Form Section -->
+        <section class="contact-form-section">
+            <div class="form-container">
+                <div class="form-header">
+                    <h2>Envíanos un Mensaje</h2>
+                    <p>Cuéntanos sobre tu proyecto y nos pondremos en contacto lo antes posible</p>
+                </div>
+
+                <form id="contactForm" class="contact-form">
+                    <div class="form-group">
+                        <label for="nombre">Nombre Completo</label>
+                        <input type="text" id="nombre" name="nombre" required placeholder="Tu nombre">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Correo Electrónico</label>
+                        <input type="email" id="email" name="email" required placeholder="tu@email.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefono">Teléfono</label>
+                        <input type="tel" id="telefono" name="telefono" placeholder="+34 900 123 456">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="empresa">Empresa (Opcional)</label>
+                        <input type="text" id="empresa" name="empresa" placeholder="Nombre de tu empresa">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="asunto">Asunto</label>
+                        <select id="asunto" name="asunto" required>
+                            <option value="">Selecciona un asunto</option>
+                            <option value="consulta">Consulta General</option>
+                            <option value="presupuesto">Solicitar Presupuesto</option>
+                            <option value="proyecto">Nuevo Proyecto</option>
+                            <option value="soporte">Soporte Técnico</option>
+                            <option value="asociacion">Posible Asociación</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="mensaje">Mensaje</label>
+                        <textarea id="mensaje" name="mensaje" required placeholder="Cuéntanos más sobre tu proyecto..." rows="6"></textarea>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="privacidad" name="privacidad" required>
+                            He leído y acepto la política de privacidad
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-large">Enviar Mensaje</button>
+                </form>
+
+                <div id="formMessage" class="form-message" style="display: none;"></div>
+            </div>
+        </section>
+
+        <!-- Social Links Section -->
+        <section class="social-section">
+            <h2>Síguenos en Redes Sociales</h2>
+            <div class="social-links">
+                <a href="https://twitter.com" target="_blank" class="social-link">Twitter</a>
+                <a href="https://linkedin.com" target="_blank" class="social-link">LinkedIn</a>
+                <a href="https://github.com" target="_blank" class="social-link">GitHub</a>
+                <a href="https://instagram.com" target="_blank" class="social-link">Instagram</a>
+            </div>
+        </section>
     </main>
-    <!--<script src="js/form_contact.js"></script>-->
-    <script src="typescript/hello.js"></script>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h4>ROBIOTEC</h4>
+                <p>Soluciones robóticas y tecnológicas para el futuro</p>
+            </div>
+            <div class="footer-column">
+                <h4>Enlaces Rápidos</h4>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="about.html">Nosotros</a></li>
+                    <li><a href="services.html">Servicios</a></li>
+                    <li><a href="project.html">Proyectos</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Privacidad</a></li>
+                    <li><a href="#">Términos de Uso</a></li>
+                    <li><a href="#">Cookies</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 ROBIOTEC. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="js/efectCanvas.js"></script>
+    <script src="js/form_contact.js"></script>
 </body>
 </html>

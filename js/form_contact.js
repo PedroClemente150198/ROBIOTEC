@@ -1,52 +1,70 @@
 
-console.log('Hola desde JS');
+// Manejo del Formulario de Contacto
 
+document.addEventListener('DOMContentLoaded', function() {
+    const contactForm = document.getElementById('contactForm');
+    const formMessage = document.getElementById('formMessage');
 
-function sumar (a, b) {
-    return a + b;
-}
-
-console.log('La suma de 2 y 3 es:', sumar(2, 3));
-
-const sumarArrow = (a,b) => a + b;
-
-console.log('La suma de 5 y 7 es:', sumarArrow(5, 7));
-
-function saludar (nombre){
-    return `Hola, ${nombre}! Bienvenido a ROBIOTEC.`;
-}
-
-console.log(saludar('Pedro'));
-
-const saludarArrow = nombre => `Hola, ${nombre}! Bienvenido a ROBIOTEC.`;
-
-console.log(saludarArrow('Ana'));
-
-function obtenrObjeto (){
-    return {
-        nombre: 'ROBIOTEC',
-        ubicacion: 'Madrid',
-        empleados: 50
+    if (contactForm) {
+        contactForm.addEventListener('submit', handleFormSubmit);
     }
-}
-console.log(obtenrObjeto());
 
-const obtenrObjetoArrow = () => ({
-    nombre: 'ROBIOTEC',
-    ubicacion: 'Madrid',
-    empleados: 50
+    async function handleFormSubmit(e) {
+        e.preventDefault();
+
+        // Obtener datos del formulario
+        const formData = {
+            nombre: document.getElementById('nombre').value,
+            email: document.getElementById('email').value,
+            telefono: document.getElementById('telefono').value,
+            empresa: document.getElementById('empresa').value,
+            asunto: document.getElementById('asunto').value,
+            mensaje: document.getElementById('mensaje').value,
+            fecha: new Date().toLocaleString('es-ES')
+        };
+
+        try {
+            // Validar datos
+            if (!formData.nombre || !formData.email || !formData.mensaje) {
+                showMessage('Por favor completa todos los campos requeridos', 'error');
+                return;
+            }
+
+            // En producción, aquí irías a un backend
+            // Por ahora simularemos el envío
+            console.log('Datos del formulario:', formData);
+
+            // Simular envío exitoso
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            // Mostrar mensaje de éxito
+            showMessage('¡Mensaje enviado correctamente! Nos pondremos en contacto pronto.', 'success');
+
+            // Limpiar formulario
+            contactForm.reset();
+
+            // Opcionalmente, redirigir después de 2 segundos
+            setTimeout(() => {
+                // window.location.href = 'index.html';
+            }, 2000);
+
+        } catch (error) {
+            console.error('Error al enviar formulario:', error);
+            showMessage('Hubo un error al enviar el mensaje. Por favor intenta de nuevo.', 'error');
+        }
+    }
+
+    function showMessage(text, type) {
+        formMessage.textContent = text;
+        formMessage.className = `form-message ${type}`;
+        formMessage.style.display = 'block';
+
+        // Auto-ocultar después de 5 segundos
+        setTimeout(() => {
+            formMessage.style.display = 'none';
+        }, 5000);
+    }
 });
-
-console.log(obtenrObjetoArrow());
-
-
-[1,2].map(function (x) {
-    return x * 2;
-});
-
-console.log([1,2].map(x => x * 2));
-
-console.log([12, 42].map(x => x * 2));
 
 setTimeout(() => {
     console.log('Esto se muestra después de 2 segundos');
